@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "media_session"
+version = "0.1.0"
+description = ""
+authors = ["Vlad <89295404+Virashu@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "<3.13,>=3.10"
+winrt-windows-foundation = "^2.0.0b2"
+winrt-windows-foundation-collections = "^2.0.0b2"
+winrt-windows-media = "^2.0.0b2"
+winrt-windows-media-control = "^2.0.0b2"
+winrt-windows-storage-streams = "^2.0.0b2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
