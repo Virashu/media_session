@@ -7,7 +7,7 @@ __all__ = ["MediaSession", "MediaRepeatMode"]
 import asyncio
 import json
 import logging
-from typing import Any, Callable, TypeAlias
+from typing import Any
 from base64 import b64encode
 from pprint import pformat
 from time import time
@@ -32,37 +32,22 @@ from winrt.windows.storage.streams import (
     InputStreamOptions as _InputStreamOptions,
 )
 
-from ..utils import read_file, read_file_bytes, write_file
-
-
-def _async_callback(callback: Callable) -> Callable:
-    """Use async function as sync callback"""
-
-    def f(*args, **kwargs):
-        return asyncio.run(callback(*args, **kwargs))
-
-    return f
-
+from .utils import read_file, read_file_bytes, write_file, _async_callback
+from .types import MediaSessionUpdateCallback
 
 logger = logging.getLogger(__name__)
 
 DIRNAME = __file__.replace("\\", "/").rsplit("/", 1)[0]
-
-#########
-# Types #
-#########
-
-MediaSessionUpdateCallback: TypeAlias = Callable[[dict[str, Any]], Any]
 
 #############
 # Constants #
 #############
 
 MEDIA_DATA_TEMPLATE: dict[str, Any] = json.loads(
-    read_file(f"{DIRNAME}/../content/template.json")
+    read_file(f"{DIRNAME}/static/template.json")
 )
-COVER_FILE: str = f"{DIRNAME}/../content/media_thumb.png"
-COVER_PLACEHOLDER_FILE: str = f"{DIRNAME}/../content/placeholder.png"
+COVER_FILE: str = f"{DIRNAME}/static/media_thumb.png"
+COVER_PLACEHOLDER_FILE: str = f"{DIRNAME}/static/placeholder.png"
 COVER_PLACEHOLDER_RAW: bytes = read_file_bytes(COVER_PLACEHOLDER_FILE)
 COVER_PLACEHOLDER_B64: str = b64encode(COVER_PLACEHOLDER_RAW).decode("utf-8")
 
@@ -288,7 +273,7 @@ class MediaSession:
         info_dict["thumbnail"] = COVER_FILE
         info_dict["thumbnail_url"] = "file:///" + COVER_FILE
 
-        # logger.debug(pformat(info_dict))
+        logger.debug(pformat(info_dict))
         self._update_data("media_properties", info_dict)
 
     async def _playback_info_changed(self, *_):
@@ -333,7 +318,7 @@ class MediaSession:
         if (repeat_mode := info_dict.get("auto_repeat_mode")) is not None:
             info_dict["auto_repeat_mode"] = repeat_codes[int(repeat_mode)]
         info_dict["controls"] = None
-        # logger.debug(pformat(info_dict))
+        logger.debug(pformat(info_dict))
         self._update_data("playback_info", info_dict)
 
     async def _timeline_properties_changed(self, *_):
@@ -374,7 +359,7 @@ class MediaSession:
             info_dict[f] = int(info_dict[f].total_seconds())
         info_dict["last_updated_time"] = int(info_dict["last_updated_time"].timestamp())
         info_dict["position_soft"] = info_dict["position"]
-        # logger.debug(pformat(info_dict))
+        logger.debug(pformat(info_dict))
         self._update_data("timeline_properties", info_dict)
 
     #
@@ -430,6 +415,9 @@ class MediaSession:
 
         Available modes: 'none', 'track', 'list'"""
 
+        if self._session is None:
+            return
+
         _mode: MediaRepeatMode
         if isinstance(mode, str):
             _mode = {
@@ -441,8 +429,8 @@ class MediaSession:
             _mode = MediaRepeatMode(mode)
         else:
             _mode = mode
-        if self._session is not None:
-            await self._session.try_change_auto_repeat_mode_async(_mode)
+
+        await self._session.try_change_auto_repeat_mode_async(_mode)
 
     async def set_shuffle(self, shuffle: bool):
         """shuffle: True, False"""
@@ -491,19 +479,3 @@ class MediaSession:
         if self._session is None:
             return
         await self._session.try_rewind_async()
-
-
-if __name__ == "__main__":
-
-    def _update(data):
-        write_file(f"{DIRNAME}/content/contents.json", json.dumps(data, indent="  "))
-
-    async def _run():
-        await _p.loop()
-        await asyncio.Future()
-
-    _p = MediaSession(_update)
-    try:
-        asyncio.run(_run())
-    except KeyboardInterrupt:
-        ...

@@ -8,3 +8,4 @@
 - [ ] Client application side API (get info, controls)
 - [ ] Player application side API (set playback info, handle controls)
 - [ ] Get rid of side effects (file writing, etc)
+- [ ] Turn constants into custom params
