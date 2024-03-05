@@ -3,6 +3,8 @@
 
 ## Todo
 
-- [ ] Linux mpris support
-- [ ] Player application size API (set playback info, handle controls)
+- [x] Windows `Windows.Media.Control` support
+- [ ] Linux `MPRIS` support
+- [ ] Client application side API (get info, controls)
+- [ ] Player application side API (set playback info, handle controls)
 - [ ] Get rid of side effects (file writing, etc)
