@@ -23,62 +23,6 @@ files = [
 ]
 
 [[package]]
-name = "winrt-windows-foundation"
-version = "2.0.0b2"
-description = "Python projection of Windows Runtime (WinRT) APIs"
-optional = false
-python-versions = "<3.13,>=3.9"
-files = [
-    {file = "winrt-Windows.Foundation-2.0.0b2.tar.gz", hash = "sha256:9ba9bd5f6383a2879b57fe8bb2f5132b230379aa1145b5443f853067ad404fba"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp310-cp310-win32.whl", hash = "sha256:3f601286c043d9c287c734dc74afce4e827aa9e8a0087c1d87a645f6a80fa037"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp310-cp310-win_amd64.whl", hash = "sha256:c2298c2163c75a03569b84d4fe191a31599ee0055c3ac27230af7ccd7fb1fb78"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp310-cp310-win_arm64.whl", hash = "sha256:86d163116e9839d3691a73bcd7d067a1c5e14156b37ee15c83d23ecb4a5180f5"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp311-cp311-win32.whl", hash = "sha256:ca8152be0a78fb60b1874d41fd5b94c31c5b29d9805d1cd75c16cd79b492c00a"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp311-cp311-win_amd64.whl", hash = "sha256:be084ec003ef3a7dc5fa1d096c50de20dd388c93b05339c63b7bdc1a575d3bc9"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp311-cp311-win_arm64.whl", hash = "sha256:37c32ed17fd9f5c0e1b936f1933971262e0c715417c77029609389d1f64856f5"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp312-cp312-win32.whl", hash = "sha256:f843b7929a5bf330e5f6cc5437af1023c0ba6da6248174ad026ac115695ee2a4"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp312-cp312-win_amd64.whl", hash = "sha256:276b7e01400b88a5eb9e55a6412c6cfc42957fac425795ca5089e1a7c397dbf8"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp312-cp312-win_arm64.whl", hash = "sha256:ed43b006049cca5180a749a1dfd912a787008bf844381931b128e387c2370bd4"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp39-cp39-win32.whl", hash = "sha256:f4344d0b4306e890debb0a1a5a5cad9323a9afdd48089e1951ebf23e8247fae3"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp39-cp39-win_amd64.whl", hash = "sha256:2c964a6d4ab23eabdbc70eb0c54c0ca0fde483a4c0a1a453a98825b79496b910"},
-    {file = "winrt_Windows.Foundation-2.0.0b2-cp39-cp39-win_arm64.whl", hash = "sha256:6fe751efaef5ef03af7ff2a89475672bd62fbe28bc6b994a9662d27ee3bfa359"},
-]
-
-[package.dependencies]
-winrt-runtime = "2.0.0-beta.2"
-
-[package.extras]
-all = ["winrt-Windows.Foundation.Collections[all] (==2.0.0-beta.2)"]
-
-[[package]]
-name = "winrt-windows-foundation-collections"
-version = "2.0.0b2"
-description = "Python projection of Windows Runtime (WinRT) APIs"
-optional = false
-python-versions = "<3.13,>=3.9"
-files = [
-    {file = "winrt-Windows.Foundation.Collections-2.0.0b2.tar.gz", hash = "sha256:8e0d64e1c43be71b8e6c50cfbc1512a53f6e4a1cdfa21cbf1b2152630bdcdf74"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp310-cp310-win32.whl", hash = "sha256:e43148771cfd3bee67a2a582378b3a49a7143961beb3730b8f38b3ccf1a0b918"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp310-cp310-win_amd64.whl", hash = "sha256:443e88e11ae7b37aaaf7f0167e30d6f65154724fd987ec67bd508f2ac235fec7"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp310-cp310-win_arm64.whl", hash = "sha256:55a390338bb5634714146a375fb929e90ebbe9055ce7abc5a35458e96f4314da"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp311-cp311-win32.whl", hash = "sha256:b5ee2ed67ff6b65aca000b188c6a1e758155a76ae8c2d899a0afee6b22de729c"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp311-cp311-win_amd64.whl", hash = "sha256:38531b74c0f9f149fffda1fb0300bd91bd499fe644af8579ff2ccc7552e0f3fd"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp311-cp311-win_arm64.whl", hash = "sha256:0721a954e607e77850b9cfffd5f15eb0b1dcdafc8e75c506cc06d6402d180a0f"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp312-cp312-win32.whl", hash = "sha256:102e8752ac0c920418cff9f241f44472bfd1685c259a55be5a8c3cda24fd24b0"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp312-cp312-win_amd64.whl", hash = "sha256:0a100d6d9a158594e59edcc8e4fb8b32b885a1aafc5c3659a028a670261d7e1e"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp312-cp312-win_arm64.whl", hash = "sha256:5ac6c26c5ba936cceaacb38dd9c3224e0b7c3e45ead04642df653d876ea378ba"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp39-cp39-win32.whl", hash = "sha256:73b35b0a7ea53b1c9774101ff77cf4d0944f674ce29896dfa3448bc900180789"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp39-cp39-win_amd64.whl", hash = "sha256:78f597a4181ab44ed7e8c294aed7bd9f2326c00b807e147adf190ab5027a8a48"},
-    {file = "winrt_Windows.Foundation.Collections-2.0.0b2-cp39-cp39-win_arm64.whl", hash = "sha256:d677df7d8e2cf484af8a8011245cd965f610b5376edb11a7125473b6db1ada7d"},
-]
-
-[package.dependencies]
-winrt-runtime = "2.0.0-beta.2"
-
-[package.extras]
-all = ["winrt-Windows.Foundation[all] (==2.0.0-beta.2)"]
-
-[[package]]
 name = "winrt-windows-media"
 version = "2.0.0b2"
 description = "Python projection of Windows Runtime (WinRT) APIs"
@@ -165,4 +109,4 @@ all = ["winrt-Windows.Foundation.Collections[all] (==2.0.0-beta.2)", "winrt-Wind
 [metadata]
 lock-version = "2.0"
 python-versions = "<3.13,>=3.10"
-content-hash = "e064721faf7b2ef43677e356efa3c212cf50208ef5ab9c762b822b507a99dc83"
+content-hash = "463c0e9d2aa22e163fb28d7350b924ed27232f560d6d3b8378edc833a7e86b4a"

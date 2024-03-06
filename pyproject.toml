@@ -7,11 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.10"
-winrt-windows-foundation = "^2.0.0b2"
-winrt-windows-foundation-collections = "^2.0.0b2"
-winrt-windows-media = "^2.0.0b2"
-winrt-windows-media-control = "^2.0.0b2"
-winrt-windows-storage-streams = "^2.0.0b2"
+
+winrt-windows-media = {version = "^2.0.0b2", platform = "win32"}
+winrt-windows-media-control = {version = "^2.0.0b2", platform = "win32"}
+winrt-windows-storage-streams = {version = "^2.0.0b2", platform = "win32"}
+
+# winrt-windows-foundation = "^2.0.0b2"
+# winrt-windows-foundation-collections = "^2.0.0b2"
+
+# dbus-python = {platform = "linux_x86_64", version = "^1.2.18"}
 
 
 [build-system]
