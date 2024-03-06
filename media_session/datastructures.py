@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import IntEnum
 
 
 @dataclass
@@ -41,3 +42,8 @@ class MediaProperties:
     thumbnail_data: str  # base64
 
     playback_type: str
+
+class MediaRepeat(IntEnum):
+    NONE = 0
+    TRACK = 1
+    LIST = 2
