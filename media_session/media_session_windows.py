@@ -3,16 +3,13 @@ Media controller using WinRT.Windows.Media.Control
 """
 
 import asyncio
-import json
 import logging
 from typing import Any
 from base64 import b64encode
 from pprint import pformat
 from time import time
 
-# pylint: disable=no-name-in-module
 from winrt.windows.media import MediaPlaybackAutoRepeatMode as MediaRepeatMode
-
 from winrt.windows.media.control import (
     GlobalSystemMediaTransportControlsSessionManager as _MediaManager,
     GlobalSystemMediaTransportControlsSession as _MediaSession,
@@ -21,7 +18,6 @@ from winrt.windows.media.control import (
     GlobalSystemMediaTransportControlsSessionPlaybackInfo as _PlaybackInfo,
     GlobalSystemMediaTransportControlsSessionTimelineProperties as _TimelineProperties,
 )
-
 from winrt.windows.storage.streams import (
     Buffer as _Buffer,
     IBuffer as _IBuffer,
@@ -30,25 +26,19 @@ from winrt.windows.storage.streams import (
     InputStreamOptions as _InputStreamOptions,
 )
 
-from .utils import read_file, read_file_bytes, write_file, _async_callback
+from .utils import write_file, _async_callback
 from .types import MediaSessionUpdateCallback
 from .media_session import BaseMediaSession
+from .constants import (
+    MEDIA_DATA_TEMPLATE,
+    COVER_PLACEHOLDER_B64,
+    COVER_PLACEHOLDER_RAW,
+    COVER_FILE,
+)
 
 logger = logging.getLogger(__name__)
 
 DIRNAME = __file__.replace("\\", "/").rsplit("/", 1)[0]
-
-#############
-# Constants #
-#############
-
-MEDIA_DATA_TEMPLATE: dict[str, Any] = json.loads(
-    read_file(f"{DIRNAME}/static/template.json")
-)
-COVER_FILE: str = f"{DIRNAME}/static/media_thumb.png"
-COVER_PLACEHOLDER_FILE: str = f"{DIRNAME}/static/placeholder.png"
-COVER_PLACEHOLDER_RAW: bytes = read_file_bytes(COVER_PLACEHOLDER_FILE)
-COVER_PLACEHOLDER_B64: str = b64encode(COVER_PLACEHOLDER_RAW).decode("utf-8")
 
 
 class MediaSessionWindows(BaseMediaSession):

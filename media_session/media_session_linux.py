@@ -1,15 +1,14 @@
+"""
+Media controller using MPRIS
+"""
+
 # from media_session import BaseMediaSession
-import re
 import dbus
 
 # class MediaSessionLinux(BaseMediaSession): ...
 
 bus = dbus.SessionBus()
 
-
-"""
-dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.ListNames 2> /dev/null | sed -r -n '/org.mpris.MediaPlayer2/{s@.*org.mpris.MediaPlayer2.([^"]+).*@\1@g;p}'
-"""
 
 def main():
 
@@ -33,5 +32,5 @@ def main():
     metadata = properties_manager.Get("org.mpris.MediaPlayer2.Player", "Metadata")
     print(metadata)
 
-main()
 
+main()
