@@ -183,7 +183,6 @@ class MediaSessionWindows(BaseMediaSession):
     async def _try_load_thumbnail(
         self, stream_ref: _StreamReference | None
     ) -> bytes | None:
-
         if stream_ref is None:
             logger.debug("Stream reference is None")
             return
@@ -265,7 +264,7 @@ class MediaSessionWindows(BaseMediaSession):
         logger.debug(pformat(info_dict))
         self._update_data("media_properties", info_dict)
 
-    async def _playback_info_changed(self, *_):
+    async def _playback_info_changed(self, *_) -> None:
         logger.info("Playback info changed")
 
         if self._session is None:
@@ -310,7 +309,7 @@ class MediaSessionWindows(BaseMediaSession):
         logger.debug(pformat(info_dict))
         self._update_data("playback_info", info_dict)
 
-    async def _timeline_properties_changed(self, *_):
+    async def _timeline_properties_changed(self, *_) -> None:
         logger.info("Timeline properties changed")
 
         if not self._session:
@@ -373,7 +372,7 @@ class MediaSessionWindows(BaseMediaSession):
         if self._session is not None:
             await self._session.try_pause_async()
 
-    async def set_position(self, position: float):
+    async def set_position(self, position: float) -> None:
         """Set position in seconds"""
 
         if self._session is not None:
@@ -399,7 +398,7 @@ class MediaSessionWindows(BaseMediaSession):
 
     previous = prev
 
-    async def set_repeat(self, mode: str | int | MediaRepeatMode):
+    async def set_repeat(self, mode: str | int | MediaRepeatMode) -> None:
         """Set repeat mode
 
         Available modes: 'none', 'track', 'list'"""
@@ -421,13 +420,13 @@ class MediaSessionWindows(BaseMediaSession):
 
         await self._session.try_change_auto_repeat_mode_async(_mode)
 
-    async def set_shuffle(self, shuffle: bool):
+    async def set_shuffle(self, shuffle: bool) -> None:
         """shuffle: True, False"""
 
         if self._session is not None:
             await self._session.try_change_shuffle_active_async(shuffle)
 
-    async def toggle_repeat(self):
+    async def toggle_repeat(self) -> None:
         """Toggle repeat (none, track, list)"""
 
         if self._session is None:
@@ -439,7 +438,7 @@ class MediaSessionWindows(BaseMediaSession):
         _mode = MediaRepeatMode((repeat + 1) % 3)
         await self._session.try_change_auto_repeat_mode_async(_mode)
 
-    async def toggle_shuffle(self):
+    async def toggle_shuffle(self) -> None:
         """Toggle shuffle (on, off)"""
 
         if self._session is None:
@@ -450,7 +449,7 @@ class MediaSessionWindows(BaseMediaSession):
             return
         await self._session.try_change_shuffle_active_async(not shuffle)
 
-    async def seek_percentage(self, percentage: int | float):
+    async def seek_percentage(self, percentage: int | float) -> None:
         """Seek to percentage in range [0, 100]"""
 
         if self._session is None:
@@ -462,7 +461,7 @@ class MediaSessionWindows(BaseMediaSession):
         position = int(duration.total_seconds() * percentage / 100)
         await self.set_position(position)
 
-    async def rewind(self):
+    async def rewind(self) -> None:
         """Idk what it is"""
 
         if self._session is None:
