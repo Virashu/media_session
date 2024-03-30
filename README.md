@@ -9,3 +9,5 @@
 - [ ] Player application side API (set playback info, handle controls)
 - [ ] Get rid of side effects (file writing, etc)
 - [ ] Turn constants into custom params
+- [ ] Check if controls is supported before execution
+- [ ] Logging
