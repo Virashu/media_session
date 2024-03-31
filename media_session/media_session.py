@@ -5,10 +5,16 @@ Media Control API
 __all__ = ["BaseMediaSession"]
 
 import abc
+from typing import Any, Callable
 
 
 class BaseMediaSession(abc.ABC):
     """Base controller"""
+
+    @abc.abstractmethod
+    def __init__(
+        self, callback: Callable[[], Any], initial_load: bool = True
+    ) -> None: ...
 
     @abc.abstractmethod
     async def play(self) -> None: ...
