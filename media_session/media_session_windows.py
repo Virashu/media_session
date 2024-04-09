@@ -26,8 +26,8 @@ from winrt.windows.storage.streams import (
     InputStreamOptions as _InputStreamOptions,
 )
 
-from .utils import write_file, _async_callback
-from .types import MediaSessionUpdateCallback
+from .utils import write_file, async_callback
+from .typing import MediaSessionUpdateCallback
 from .media_session import BaseMediaSession
 from .constants import (
     MEDIA_DATA_TEMPLATE,
@@ -93,8 +93,8 @@ class MediaSessionWindows(BaseMediaSession):
         """Load"""
 
         self._manager = await _MediaManager.request_async()
-        self._manager.add_current_session_changed(_async_callback(self._session_events))
-        self._manager.add_sessions_changed(_async_callback(self._sessions_changed))
+        self._manager.add_current_session_changed(async_callback(self._session_events))
+        self._manager.add_sessions_changed(async_callback(self._sessions_changed))
 
         await self._session_events(self._manager)
 
@@ -158,13 +158,13 @@ class MediaSessionWindows(BaseMediaSession):
         await self._media_properties_changed()
 
         self._session.add_media_properties_changed(
-            _async_callback(self._media_properties_changed)
+            async_callback(self._media_properties_changed)
         )
         self._session.add_playback_info_changed(
-            _async_callback(self._playback_info_changed)
+            async_callback(self._playback_info_changed)
         )
         self._session.add_timeline_properties_changed(
-            _async_callback(self._timeline_properties_changed)
+            async_callback(self._timeline_properties_changed)
         )
 
     async def _sessions_changed(self, *_: Any) -> None:

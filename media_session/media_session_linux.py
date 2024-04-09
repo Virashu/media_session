@@ -4,7 +4,7 @@ Media controller using MPRIS
 
 import dbus
 from pprint import pprint
-from typing import Any
+from typing import Any, Callable
 
 
 def dbus_to_py(dbus_obj: Any) -> Any:
@@ -20,7 +20,6 @@ def dbus_to_py(dbus_obj: Any) -> Any:
         return str(dbus_obj)
     else:
         return dbus_obj
-
 
 
 bus = dbus.SessionBus()
@@ -70,14 +69,13 @@ main()
 #  'xesam:trackNumber': 1
 
 from .media_session import BaseMediaSession
+from .typing import MediaSessionUpdateCallback
 
 
 class MediaSessionLinux(BaseMediaSession):
+    def __init__(self, callback: MediaSessionUpdateCallback) -> None: ...
 
-    def __init__(self, callback: Callable) -> None:
-        super().__init__(callback)
-
-    def play(self) -> None:
+    async def play(self) -> None:
         pass
 
     def pause(self) -> None:

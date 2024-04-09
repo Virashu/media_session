@@ -1,7 +1,7 @@
-__all__ = ["write_file", "read_file", "read_file_bytes", "_async_callback"]
+__all__ = ["write_file", "read_file", "read_file_bytes", "async_callback"]
 
 import asyncio
-from typing import Callable
+from typing import Any, Callable, Coroutine
 
 
 def write_file(filename: str, contents: str | bytes) -> None:
@@ -30,7 +30,9 @@ def read_file_bytes(filename: str) -> bytes:
         return f.read()
 
 
-def _async_callback(callback: Callable) -> Callable:
+def async_callback(
+    callback: Callable[..., Coroutine[Any, Any, Any]],
+) -> Callable[..., Any]:
     """Use async function as regular sync callback"""
 
     def f(*args, **kwargs):
