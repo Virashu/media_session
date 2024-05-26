@@ -4,5 +4,6 @@ __all__ = ["MediaSessionUpdateCallback"]
 
 from typing import Any, Callable, TypeAlias
 
+from media_session.datastructures import MediaInfo
 
-MediaSessionUpdateCallback: TypeAlias = Callable[[dict[str, Any]], Any]
+MediaSessionUpdateCallback: TypeAlias = Callable[[MediaInfo], Any]

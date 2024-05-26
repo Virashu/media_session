@@ -1,6 +1,8 @@
 import asyncio
 import json
 
+from media_session.datastructures import MediaInfo
+
 from . import MediaSession
 from .utils import write_file
 
@@ -8,8 +10,8 @@ from .utils import write_file
 INFODIR = "info.json"  # cwd
 
 
-def _update(data):
-    write_file(INFODIR, json.dumps(data, indent="  "))
+def _update(data: MediaInfo):
+    write_file(INFODIR, json.dumps(data.dict(), indent="  "))
 
 
 def main():

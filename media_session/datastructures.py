@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import IntEnum
 
 
 @dataclass
-class MediaSessionInfo:
+class RawMediaInfo:
     provider: str
     playback_info: PlaybackInfo
     timeline_properties: TimelineProperties
@@ -43,7 +43,27 @@ class MediaProperties:
 
     playback_type: str
 
+
 class MediaRepeat(IntEnum):
     NONE = 0
     TRACK = 1
     LIST = 2
+
+
+@dataclass
+class MediaInfo:
+    title: str
+    artist: str
+
+    album_title: str
+    album_artist: str
+
+    album_track_count: int
+    track_number: int
+
+    genres: list[str]
+
+    thumbnail: str
+    thumbnail_data: str
+
+    dict = asdict

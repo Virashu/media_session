@@ -2,12 +2,26 @@
 Media controller using MPRIS
 """
 
+__all__ = ["MediaSessionLinux"]
+
+from typing import Any, overload
+
 import dbus
-from pprint import pprint
-from typing import Any, Callable
+
+from .datastructures import MediaInfo
+from .media_session import BaseMediaSession
+from .typing import MediaSessionUpdateCallback
 
 
-def dbus_to_py(dbus_obj: Any) -> Any:
+@overload
+def dbus_to_py(dbus_obj: dbus.Dictionary) -> dict: ...
+
+
+@overload
+def dbus_to_py(dbus_obj: dbus.Array) -> list: ...
+
+
+def dbus_to_py(dbus_obj: Any) -> object:
     if isinstance(dbus_obj, dbus.Array):
         return list(map(dbus_to_py, dbus_obj))
     elif isinstance(dbus_obj, dbus.Dictionary):
@@ -22,73 +36,79 @@ def dbus_to_py(dbus_obj: Any) -> Any:
         return dbus_obj
 
 
-bus = dbus.SessionBus()
-
-
-def main():
-    names = bus.list_names()
-
-    if not names:
-        return
-
-    players = tuple(filter(lambda x: x.startswith("org.mpris.MediaPlayer2."), names))
-
-    if len(players) == 0:
-        print("No players found")
-        return
-
-    if len(players) == 1:
-        index = 0
-    else:
-        print(*players, sep="\n")
-        index = int(input("Index: "))
-
-    selected = players[index]
-
-    print(selected)
-
-    proxy = bus.get_object(str(selected), "/org/mpris/MediaPlayer2")
-
-    properties_manager = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
-    metadata = properties_manager.Get("org.mpris.MediaPlayer2.Player", "Metadata")
-    pprint(dbus_to_py(metadata))
-
-
-main()
-
-#  'mpris:artUrl': '/home/virashu/.config//musikcube/1//thumbs/482.jpg',
-#  'mpris:length': 229000000,
-#  'mpris:trackid': '/1',
-#  'xesam:album': '',
-#  'xesam:albumArtist': ['Azu Izumi 2'],
-#  'xesam:artist': ['Azu Izumi 2'],
-#  'xesam:comment': [''],
-#  'xesam:discNumber': 1,
-#  'xesam:genre': ['Dance & EDM'],
-#  'xesam:title': 'REOL - drop pop candy (OKINAWA IKITAI remix)',
-#  'xesam:trackNumber': 1
-
-from .media_session import BaseMediaSession
-from .typing import MediaSessionUpdateCallback
-
-
 class MediaSessionLinux(BaseMediaSession):
-    def __init__(self, callback: MediaSessionUpdateCallback) -> None: ...
+    def __init__(self, callback: MediaSessionUpdateCallback) -> None:
+        self._update_callback = callback
+        self._bus = dbus.SessionBus()
+
+        names = self._bus.list_names()
+
+        if not names:
+            return
+
+        players = tuple(
+            filter(lambda x: x.startswith("org.mpris.MediaPlayer2."), names)
+        )
+
+        if len(players) == 0:
+            print("No players found")
+            return
+
+        if len(players) == 1:
+            index = 0
+        else:
+            print("Found multiple players\n================")
+            print(*players, sep="\n")
+            index = int(input("Index: "))
+
+        selected = players[index]
+
+        print(selected)
+
+        proxy = self._bus.get_object(str(selected), "/org/mpris/MediaPlayer2")
+
+        properties_manager = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
+        metadata: dbus.Dictionary = properties_manager.Get(
+            "org.mpris.MediaPlayer2.Player", "Metadata"
+        )
+        self._data_raw: dict = dbus_to_py(metadata)
+
+    async def load(self) -> None: ...
+
+    @property
+    async def data(self) -> MediaInfo:
+        return MediaInfo(
+            title=self._data_raw.get("xesam:title"),
+            artist=self._data_raw["xesam:artist"],
+            album_title=self._data_raw["xesam:album"],
+            album_artist=self._data_raw["xesam:albumArtist"],
+            track_number=self._data_raw["xesam:trackNumber"],
+            album_track_count=self._data_raw["xesam:discNumber"],
+            genres=self._data_raw["xesam:genre"],
+            thumbnail=self._data_raw["mpris:artUrl"],
+            thumbnail_data="",
+        )
+
+    async def update(self) -> None:
+        pass
+
+    async def loop(self) -> None:
+        self._update_callback(await self.data)
 
     async def play(self) -> None:
         pass
 
-    def pause(self) -> None:
+    async def pause(self) -> None:
         pass
 
-    def play_pause(self) -> None:
+    async def play_pause(self) -> None:
         pass
 
-    def next(self) -> None:
+    async def next(self) -> None:
         pass
 
-    def prev(self) -> None:
+    async def prev(self) -> None:
         pass
 
-    def stop(self) -> None:
+    async def stop(self) -> None:
         pass

@@ -1,5 +1,6 @@
 media_session/static/media_thumb.png
 media_session/static/data.json
+info.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
