@@ -1,0 +1,7 @@
+dbus-python==1.3.2 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "linux"
+winrt-runtime==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"
+winrt-windows-foundation-collections==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"
+winrt-windows-foundation==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"
+winrt-windows-media-control==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"
+winrt-windows-media==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"
+winrt-windows-storage-streams==2.0.1 ; python_version >= "3.10" and python_version < "3.13" and sys_platform == "win32"

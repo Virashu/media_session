@@ -2,18 +2,21 @@
 Media controller using WinRT.Windows.Media.Control
 """
 
+__all__ = ["MediaSessionWindows", "MediaRepeatMode"]
+
 import asyncio
 import logging
-from typing import Any
 from base64 import b64encode
 from pprint import pformat
 from time import time
+from typing import Any, final
+
+# isort: off
 
 from winrt.windows.media import MediaPlaybackAutoRepeatMode as MediaRepeatMode
 from winrt.windows.media.control import (
-    GlobalSystemMediaTransportControlsSessionManager as _MediaManager,
     GlobalSystemMediaTransportControlsSession as _MediaSession,
-    #
+    GlobalSystemMediaTransportControlsSessionManager as _MediaManager,
     GlobalSystemMediaTransportControlsSessionMediaProperties as _MediaProperties,
     GlobalSystemMediaTransportControlsSessionPlaybackInfo as _PlaybackInfo,
     GlobalSystemMediaTransportControlsSessionTimelineProperties as _TimelineProperties,
@@ -26,19 +29,19 @@ from winrt.windows.storage.streams import (
     InputStreamOptions as _InputStreamOptions,
 )
 
-from .utils import write_file, async_callback
-from .typing import MediaSessionUpdateCallback
-from .media_session import BaseMediaSession
+# isort: on
+
 from .constants import (
-    MEDIA_DATA_TEMPLATE,
+    COVER_FILE,
     COVER_PLACEHOLDER_B64,
     COVER_PLACEHOLDER_RAW,
-    COVER_FILE,
+    MEDIA_DATA_TEMPLATE,
 )
+from .media_session import BaseMediaSession
+from .typing import MediaSessionUpdateCallback
+from .utils import async_callback, write_file
 
 logger = logging.getLogger(__name__)
-
-DIRNAME = __file__.replace("\\", "/").rsplit("/", 1)[0]
 
 
 class MediaSessionWindows(BaseMediaSession):
@@ -354,42 +357,49 @@ class MediaSessionWindows(BaseMediaSession):
     # PUBLIC METHODS
     #
 
+    @final
     async def play(self) -> None:
         """Start playback"""
 
         if self._session is not None:
             await self._session.try_play_async()
 
+    @final
     async def stop(self) -> None:
         """Stop playback"""
 
         if self._session is not None:
             await self._session.try_stop_async()
 
+    @final
     async def pause(self) -> None:
         """Pause playback"""
 
         if self._session is not None:
             await self._session.try_pause_async()
 
+    @final
     async def set_position(self, position: float) -> None:
         """Set position in seconds"""
 
         if self._session is not None:
             await self._session.try_change_playback_position_async(int(position * 1e7))
 
+    @final
     async def play_pause(self) -> None:
         """Toggle play/pause"""
 
         if self._session is not None:
             await self._session.try_toggle_play_pause_async()
 
+    @final
     async def next(self) -> None:
         """Select next track"""
 
         if self._session is not None:
             await self._session.try_skip_next_async()
 
+    @final
     async def prev(self) -> None:
         """Select previous track"""
 
@@ -420,12 +430,14 @@ class MediaSessionWindows(BaseMediaSession):
 
         await self._session.try_change_auto_repeat_mode_async(_mode)
 
+    @final
     async def set_shuffle(self, shuffle: bool) -> None:
         """shuffle: True, False"""
 
         if self._session is not None:
             await self._session.try_change_shuffle_active_async(shuffle)
 
+    @final
     async def toggle_repeat(self) -> None:
         """Toggle repeat (none, track, list)"""
 
@@ -438,6 +450,7 @@ class MediaSessionWindows(BaseMediaSession):
         _mode = MediaRepeatMode((repeat + 1) % 3)
         await self._session.try_change_auto_repeat_mode_async(_mode)
 
+    @final
     async def toggle_shuffle(self) -> None:
         """Toggle shuffle (on, off)"""
 
@@ -449,6 +462,7 @@ class MediaSessionWindows(BaseMediaSession):
             return
         await self._session.try_change_shuffle_active_async(not shuffle)
 
+    @final
     async def seek_percentage(self, percentage: int | float) -> None:
         """Seek to percentage in range [0, 100]"""
 
@@ -461,6 +475,7 @@ class MediaSessionWindows(BaseMediaSession):
         position = int(duration.total_seconds() * percentage / 100)
         await self.set_position(position)
 
+    @final
     async def rewind(self) -> None:
         """Idk what it is"""
 
