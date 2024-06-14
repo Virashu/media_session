@@ -11,3 +11,23 @@
 - [ ] Turn constants into custom params
 - [ ] Check if controls is supported before execution
 - [ ] Logging
+
+## Data structures (json)
+
+```
+<MediaInfo> {
+  title: string
+  artist: string
+
+  album_title: string
+  album_artist: string
+
+  album_track_count: number
+  track_number: number
+
+  genres: string[]
+
+  cover: string
+  cover_data: string
+}
+```

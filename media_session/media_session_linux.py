@@ -85,8 +85,8 @@ class MediaSessionLinux(BaseMediaSession):
             track_number=self._data_raw["xesam:trackNumber"],
             album_track_count=self._data_raw["xesam:discNumber"],
             genres=self._data_raw["xesam:genre"],
-            thumbnail=self._data_raw["mpris:artUrl"],
-            thumbnail_data="",
+            cover=self._data_raw["mpris:artUrl"],
+            cover_data="",
         )
 
     async def update(self) -> None:

@@ -38,6 +38,7 @@ from .constants import (
     MEDIA_DATA_TEMPLATE,
 )
 from .media_session import BaseMediaSession
+from .datastructures import MediaInfo
 from .typing import MediaSessionUpdateCallback
 from .utils import async_callback, write_file
 
@@ -65,7 +66,7 @@ class MediaSessionWindows(BaseMediaSession):
         self._send_data()
 
     @property
-    def data(self) -> dict[str, Any]:
+    def data__(self) -> dict[str, Any]:
         """Get media session data"""
         return {
             "provider": self._data["provider"],
@@ -83,6 +84,20 @@ class MediaSessionWindows(BaseMediaSession):
             "position": self._data["timeline_properties"]["position_soft"],
             "loop": self._data["playback_info"].get("auto_repeat_mode"),
         }
+
+    @property
+    def data(self) -> MediaInfo:
+        return MediaInfo(
+            title=self._data["media_properties"]["title"],
+            artist=self._data["media_properties"]["artist"],
+            album_title=self._data["media_properties"]["album_title"],
+            album_artist=self._data["media_properties"]["album_artist"],
+            track_number=self._data["media_properties"]["track_number"],
+            album_track_count=self._data["media_properties"]["album_track_count"],
+            genres=self._data["media_properties"]["genres"],
+            cover=self._data["media_properties"]["thumbnail"],
+            cover_data=self._data["media_properties"]["thumbnail_data"],
+        )
 
     @property
     def data_raw(self) -> dict[str, Any]:

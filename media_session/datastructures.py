@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, asdict
 from enum import IntEnum
+from typing import Any
 
 
 @dataclass
@@ -63,7 +64,8 @@ class MediaInfo:
 
     genres: list[str]
 
-    thumbnail: str
-    thumbnail_data: str
+    cover: str
+    cover_data: str
 
-    dict = asdict
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)

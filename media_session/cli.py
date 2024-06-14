@@ -11,7 +11,7 @@ INFODIR = "info.json"  # cwd
 
 
 def _update(data: MediaInfo):
-    write_file(INFODIR, json.dumps(data.dict(), indent="  "))
+    write_file(INFODIR, json.dumps(data.as_dict(), indent="  "))
 
 
 def main():
