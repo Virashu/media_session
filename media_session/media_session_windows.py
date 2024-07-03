@@ -97,7 +97,8 @@ class MediaSessionWindows(BaseMediaSession):
             genres=self._data["media_properties"]["genres"],
             cover=self._data["media_properties"]["thumbnail"],
             cover_data=self._data["media_properties"]["thumbnail_data"],
-            position=self._data["timeline_properties"]["position"] // 10,  # to mics
+            position=self._data["timeline_properties"]["position_soft"]
+            // 10,  # to mics
             duration=self._data["timeline_properties"]["end_time"] // 10,  # to mics
         )
 
