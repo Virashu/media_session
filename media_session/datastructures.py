@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from enum import IntEnum
 from typing import Any
 
@@ -62,7 +62,7 @@ class MediaInfo:
     album_track_count: int = 0
     track_number: int = 0
 
-    genres: list[str] = []
+    genres: list[str] = field(default_factory=list)
 
     cover: str = ""  # filepath
     cover_data: str = ""  # base64 string
