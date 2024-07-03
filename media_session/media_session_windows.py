@@ -1,10 +1,13 @@
 """
 Media controller using WinRT.Windows.Media.Control
+
+Time variables is stored primarily in microseconds
 """
 
 __all__ = ["MediaSessionWindows", "MediaRepeatMode"]
 
 import asyncio
+from datetime import timedelta
 import logging
 from base64 import b64encode
 from pprint import pformat
@@ -97,9 +100,9 @@ class MediaSessionWindows(BaseMediaSession):
             genres=self._data["media_properties"]["genres"],
             cover=self._data["media_properties"]["thumbnail"],
             cover_data=self._data["media_properties"]["thumbnail_data"],
-            position=self._data["timeline_properties"]["position_soft"]
-            // 10,  # to mics
-            duration=self._data["timeline_properties"]["end_time"] // 10,  # to mics
+            position=self._data["timeline_properties"]["position_soft"],
+            duration=self._data["timeline_properties"]["end_time"],
+            state=self._data["playback_info"]["playback_status"],
         )
 
     @property
@@ -363,7 +366,8 @@ class MediaSessionWindows(BaseMediaSession):
             "position",
             "start_time",
         ):
-            info_dict[f] = int(info_dict[f].total_seconds())
+            k: timedelta = info_dict[f]
+            info_dict[f] = int(k.microseconds + k.seconds * 1e6)
         info_dict["last_updated_time"] = int(info_dict["last_updated_time"].timestamp())
         info_dict["position_soft"] = info_dict["position"]
         logger.debug(pformat(info_dict))

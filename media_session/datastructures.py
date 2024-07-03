@@ -70,5 +70,7 @@ class MediaInfo:
     position: int = 0  # microseconds
     duration: int = 0  # microseconds
 
+    state: str = "stopped"  # Literal["stopped", "playing", "paused"]
+
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
