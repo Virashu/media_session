@@ -66,7 +66,7 @@ class MediaSessionWindows(BaseMediaSession):
         self._send_data()
 
     @property
-    def data__(self) -> dict[str, Any]:
+    def data_v1(self) -> dict[str, Any]:
         """Get media session data"""
         return {
             "provider": self._data["provider"],
@@ -97,6 +97,8 @@ class MediaSessionWindows(BaseMediaSession):
             genres=self._data["media_properties"]["genres"],
             cover=self._data["media_properties"]["thumbnail"],
             cover_data=self._data["media_properties"]["thumbnail_data"],
+            position=self._data["timeline_properties"]["position"] // 10,  # to mics
+            duration=self._data["timeline_properties"]["end_time"] // 10,  # to mics
         )
 
     @property
@@ -218,7 +220,7 @@ class MediaSessionWindows(BaseMediaSession):
         except OSError as e:
             logger.error("Failed to get thumbnail!\n%s", e)
 
-    async def _media_properties_changed(self, *_) -> None:
+    async def _media_properties_changed(self, *_: Any) -> None:
         logger.info("Media properties changed")
 
         if self._session is None:
@@ -231,7 +233,7 @@ class MediaSessionWindows(BaseMediaSession):
         except PermissionError:
             return
 
-        info_dict = {}
+        info_dict: dict[str, Any] = {}
         fields = [
             "album_artist",
             "album_title",
@@ -261,12 +263,10 @@ class MediaSessionWindows(BaseMediaSession):
         if thumb:  # (thumb != None) & (thumb != b"")
             thumb_img = thumb
         else:
-            # DEBUG
             if thumb is None:
                 logger.warning("Thumbnail is None")
             elif thumb == b"":
                 logger.warning("Thumbnail is empty")
-            # END DEBUG
             thumb_img = COVER_PLACEHOLDER_RAW
             logger.warning("No correct thumbnail info, using placeholder")
 
@@ -282,7 +282,7 @@ class MediaSessionWindows(BaseMediaSession):
         logger.debug(pformat(info_dict))
         self._update_data("media_properties", info_dict)
 
-    async def _playback_info_changed(self, *_) -> None:
+    async def _playback_info_changed(self, *_: Any) -> None:
         logger.info("Playback info changed")
 
         if self._session is None:
@@ -293,7 +293,7 @@ class MediaSessionWindows(BaseMediaSession):
         if info is None:
             return
 
-        info_dict = {}
+        info_dict: dict[str, Any] = {}
         fields = (
             "auto_repeat_mode",
             "controls",
@@ -327,7 +327,7 @@ class MediaSessionWindows(BaseMediaSession):
         logger.debug(pformat(info_dict))
         self._update_data("playback_info", info_dict)
 
-    async def _timeline_properties_changed(self, *_) -> None:
+    async def _timeline_properties_changed(self, *_: Any) -> None:
         logger.info("Timeline properties changed")
 
         if not self._session:
@@ -338,7 +338,7 @@ class MediaSessionWindows(BaseMediaSession):
         if info is None:
             return
 
-        info_dict = {}
+        info_dict: dict[str, Any] = {}
 
         fields = (
             "end_time",
@@ -438,7 +438,7 @@ class MediaSessionWindows(BaseMediaSession):
                 "track": MediaRepeatMode.TRACK,
                 "list": MediaRepeatMode.LIST,
             }.get(mode, MediaRepeatMode.NONE)
-        elif isinstance(mode, int):
+        elif isinstance(mode, int):  # type: ignore
             _mode = MediaRepeatMode(mode)
         else:
             _mode = mode
@@ -485,8 +485,9 @@ class MediaSessionWindows(BaseMediaSession):
             return
         if (timeline_properties := self._session.get_timeline_properties()) is None:
             return
-        if (duration := timeline_properties.max_seek_time) is None:
-            return
+
+        duration = timeline_properties.max_seek_time
+
         position = int(duration.total_seconds() * percentage / 100)
         await self.set_position(position)
 

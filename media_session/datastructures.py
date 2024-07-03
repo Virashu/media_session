@@ -51,21 +51,24 @@ class MediaRepeat(IntEnum):
     LIST = 2
 
 
-@dataclass
+@dataclass(frozen=True)
 class MediaInfo:
-    title: str
-    artist: str
+    title: str = ""
+    artist: str = ""
 
-    album_title: str
-    album_artist: str
+    album_title: str = ""
+    album_artist: str = ""
 
-    album_track_count: int
-    track_number: int
+    album_track_count: int = 0
+    track_number: int = 0
 
-    genres: list[str]
+    genres: list[str] = []
 
-    cover: str
-    cover_data: str
+    cover: str = ""  # filepath
+    cover_data: str = ""  # base64 string
+
+    position: int = 0  # microseconds
+    duration: int = 0  # microseconds
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
