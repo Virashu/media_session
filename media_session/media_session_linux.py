@@ -71,7 +71,7 @@ class MediaSessionLinux(BaseMediaSession):
         metadata: dbus.Dictionary = properties_manager.Get(
             "org.mpris.MediaPlayer2.Player", "Metadata"
         )
-        self._data_raw: dict = dbus_to_py(metadata)
+        self._data_raw: dict[str, Any] = dbus_to_py(metadata)
 
     async def load(self) -> None: ...
 

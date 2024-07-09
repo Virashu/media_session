@@ -4,8 +4,10 @@ MediaSessionAPI for client
 Made using 'winrt' python mapping
 """
 
-__all__ = ["MediaSession"]
+__all__ = ["AbstractMediaSession", "MediaSession"]
 import os
+
+from .media_session import BaseMediaSession as AbstractMediaSession
 
 if os.name == "nt":
     from .media_session_windows import MediaSessionWindows as MediaSession

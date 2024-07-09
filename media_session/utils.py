@@ -1,7 +1,7 @@
 __all__ = ["write_file", "read_file", "read_file_bytes", "async_callback"]
 
 import asyncio
-from typing import Any, Callable, Coroutine
+from typing import Any, Callable, Coroutine, ParamSpec, TypeVar
 
 
 def write_file(filename: str, contents: str | bytes) -> None:
@@ -9,7 +9,7 @@ def write_file(filename: str, contents: str | bytes) -> None:
     if isinstance(contents, str):
         with open(filename, "w", encoding="utf-8") as f:
             f.write(contents)
-    elif isinstance(contents, bytes):
+    elif isinstance(contents, bytes):  # type: ignore
         with open(filename, "wb") as f:
             f.write(contents)
     else:
@@ -30,12 +30,14 @@ def read_file_bytes(filename: str) -> bytes:
         return f.read()
 
 
-def async_callback(
-    callback: Callable[..., Coroutine[Any, Any, Any]],
-) -> Callable[..., Any]:
+P = ParamSpec("P")
+RT = TypeVar("RT")
+
+
+def async_callback(callback: Callable[P, Coroutine[Any, Any, RT]]) -> Callable[P, RT]:
     """Use async function as regular sync callback"""
 
-    def f(*args, **kwargs):
+    def f(*args: P.args, **kwargs: P.kwargs) -> RT:
         return asyncio.run(callback(*args, **kwargs))
 
     return f
