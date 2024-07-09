@@ -5,13 +5,13 @@ Made using 'winrt' python mapping
 """
 
 __all__ = ["AbstractMediaSession", "MediaSession"]
-import os
+import sys
 
-from .media_session import BaseMediaSession as AbstractMediaSession
+from .media_session import AbstractMediaSession
 
-if os.name == "nt":
+if sys.platform == "win32":
     from .media_session_windows import MediaSessionWindows as MediaSession
-elif os.name == "posix":
+elif sys.platform == "linux":
     from .media_session_linux import MediaSessionLinux as MediaSession
 else:
     raise OSError("Unsupported platform")

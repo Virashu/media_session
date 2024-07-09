@@ -2,7 +2,7 @@
 Media Control API
 """
 
-__all__ = ["BaseMediaSession"]
+__all__ = ["AbstractMediaSession"]
 
 import abc
 
@@ -11,7 +11,10 @@ from .typing import MediaSessionUpdateCallback
 
 
 class MediaControlInterface(abc.ABC):
-    """Media Control Interface"""
+    """Media Control Interface
+
+    Defines methods for control of playback by user
+    """
 
     @abc.abstractmethod
     async def play(self) -> None: ...
@@ -31,8 +34,11 @@ class MediaControlInterface(abc.ABC):
     @abc.abstractmethod
     async def stop(self) -> None: ...
 
+    @abc.abstractmethod
+    async def seek_percentage(self, percentage: float) -> None: ...
 
-class BaseMediaSession(MediaControlInterface):
+
+class AbstractMediaSession(MediaControlInterface):
     """Base controller"""
 
     @abc.abstractmethod

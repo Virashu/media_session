@@ -9,7 +9,7 @@ from typing import Any, overload
 import dbus
 
 from .datastructures import MediaInfo
-from .media_session import BaseMediaSession
+from .media_session import AbstractMediaSession
 from .typing import MediaSessionUpdateCallback
 
 
@@ -36,7 +36,7 @@ def dbus_to_py(dbus_obj: Any) -> object:
         return dbus_obj
 
 
-class MediaSessionLinux(BaseMediaSession):
+class MediaSessionLinux(AbstractMediaSession):
     def __init__(self, callback: MediaSessionUpdateCallback) -> None:
         self._update_callback = callback
         self._bus = dbus.SessionBus()
@@ -76,7 +76,7 @@ class MediaSessionLinux(BaseMediaSession):
     async def load(self) -> None: ...
 
     @property
-    async def data(self) -> MediaInfo:
+    def data(self) -> MediaInfo:
         return MediaInfo(
             title=self._data_raw.get("xesam:title"),
             artist=self._data_raw["xesam:artist"],
@@ -93,7 +93,7 @@ class MediaSessionLinux(BaseMediaSession):
         pass
 
     async def loop(self) -> None:
-        self._update_callback(await self.data)
+        self._update_callback(self.data)
 
     async def play(self) -> None:
         pass
@@ -111,4 +111,7 @@ class MediaSessionLinux(BaseMediaSession):
         pass
 
     async def stop(self) -> None:
+        pass
+
+    async def seek_percentage(self, percentage: float) -> None:
         pass

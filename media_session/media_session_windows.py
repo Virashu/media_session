@@ -40,7 +40,7 @@ from .constants import (
     COVER_PLACEHOLDER_RAW,
     MEDIA_DATA_TEMPLATE,
 )
-from .media_session import BaseMediaSession
+from .media_session import AbstractMediaSession
 from .datastructures import MediaInfo
 from .typing import MediaSessionUpdateCallback
 from .utils import async_callback, write_file
@@ -48,7 +48,7 @@ from .utils import async_callback, write_file
 logger = logging.getLogger(__name__)
 
 
-class MediaSessionWindows(BaseMediaSession):
+class MediaSessionWindows(AbstractMediaSession):
     """Media controller using Windows.Media.Control"""
 
     def __init__(
