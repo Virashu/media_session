@@ -12,7 +12,7 @@ import logging
 from base64 import b64encode
 from pprint import pformat
 from time import time
-from typing import Any, final
+from typing import Any, final, Optional
 
 # isort: off
 
@@ -52,9 +52,11 @@ class MediaSessionWindows(AbstractMediaSession):
     """Media controller using Windows.Media.Control"""
 
     def __init__(
-        self, callback: MediaSessionUpdateCallback, initial_load: bool = True
+        self,
+        callback: Optional[MediaSessionUpdateCallback] = None,
+        initial_load: bool = True,
     ) -> None:
-        self._update_callback = callback
+        self._update_callback: Optional[MediaSessionUpdateCallback] = callback
         self._manager: _MediaManager | None = None
         self._session: _MediaSession | None = None
 
@@ -111,6 +113,9 @@ class MediaSessionWindows(AbstractMediaSession):
         return self._data
 
     def _send_data(self) -> None:
+        if self._update_callback is None:
+            return
+
         self._update_callback(self.data)
 
     async def load(self) -> None:

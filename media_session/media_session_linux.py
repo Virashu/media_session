@@ -4,7 +4,7 @@ Media controller using MPRIS
 
 __all__ = ["MediaSessionLinux"]
 
-from typing import Any, overload
+from typing import Any, overload, Optional
 
 import dbus
 
@@ -37,7 +37,7 @@ def dbus_to_py(dbus_obj: Any) -> object:
 
 
 class MediaSessionLinux(AbstractMediaSession):
-    def __init__(self, callback: MediaSessionUpdateCallback) -> None:
+    def __init__(self, callback: Optional[MediaSessionUpdateCallback] = None) -> None:
         self._update_callback = callback
         self._bus = dbus.SessionBus()
 
