@@ -4,7 +4,7 @@ Media controller using MPRIS
 
 __all__ = ["MediaSessionLinux"]
 
-from typing import Any, overload, Optional
+from typing import Any, Optional, overload
 
 import dbus
 

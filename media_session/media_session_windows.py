@@ -7,12 +7,12 @@ Time variables is stored primarily in microseconds
 __all__ = ["MediaSessionWindows", "MediaRepeatMode"]
 
 import asyncio
-from datetime import timedelta
 import logging
 from base64 import b64encode
+from datetime import timedelta
 from pprint import pformat
 from time import time
-from typing import Any, final, Optional
+from typing import Any, Optional, final
 
 # isort: off
 
@@ -40,8 +40,8 @@ from .constants import (
     COVER_PLACEHOLDER_RAW,
     MEDIA_DATA_TEMPLATE,
 )
-from .media_session import AbstractMediaSession
 from .datastructures import MediaInfo
+from .media_session import AbstractMediaSession
 from .typing import MediaSessionUpdateCallback
 from .utils import async_callback, write_file
 
@@ -151,15 +151,16 @@ class MediaSessionWindows(AbstractMediaSession):
             return
         now = time()
 
-        position = self._data["timeline_properties"]["position"]
-        last_update = self._data["timeline_properties"]["last_updated_time"]
-        rate = self._data["playback_info"]["playback_rate"]
+        position: int = self._data["timeline_properties"]["position"]
+        last_update: float = self._data["timeline_properties"]["last_updated_time"]
+        rate: float = self._data["playback_info"]["playback_rate"]
 
         if last_update < 0:
             return
 
         delta_time = now - last_update
-        delta_position = int(rate * delta_time)
+        delta_time_mcs = delta_time * 1_000_000
+        delta_position = int(rate * delta_time_mcs)
 
         position_now = position + delta_position
 
@@ -373,7 +374,8 @@ class MediaSessionWindows(AbstractMediaSession):
         ):
             k: timedelta = info_dict[f]
             info_dict[f] = int(k.microseconds + k.seconds * 1e6)
-        info_dict["last_updated_time"] = int(info_dict["last_updated_time"].timestamp())
+
+        info_dict["last_updated_time"] = info.last_updated_time.timestamp()
         info_dict["position_soft"] = info_dict["position"]
         logger.debug(pformat(info_dict))
         self._update_data("timeline_properties", info_dict)
